@@ -205,14 +205,6 @@ case
 
 This project serves as a comprehensive introduction to SQL for data analysts, covering database setup, data cleaning, exploratory data analysis, and business-driven SQL queries. The findings from this project can help drive business decisions by understanding sales patterns, customer behavior, and product performance.
 
-## How to Use 
-
-1. **Clone the Repositor**y – download/copy your project from GitHub to their computer.
-2. **Set Up the Database** – Run the SQL setup script (database_setup.sql) to create the database and required tables.
-3. **Run the Queries** – use your query file (analysis_queries.sql) to reproduce the analysis and results.
-4. **Explore and Modify** – encourage them to tweak queries or explore further insights beyond what you provided.
-
-## Author - Mohammad Gulrez Zaidi
 
 This project is part of my portfolio, showcasing the SQL skills essential for data analyst roles. If you have any questions, feedback, or would like to collaborate, feel free to get in touch!
 
@@ -221,6 +213,7 @@ This project is part of my portfolio, showcasing the SQL skills essential for da
   
 
 Thank you for your support, and I look forward to connecting with you!
+
 
 
 
