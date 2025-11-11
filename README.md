@@ -171,7 +171,7 @@ from retail_sales
 group by category;
 ```
 
-10. **Write a SQL query to create each shift and number of orders (Example Morning <12, Afternoon Between 12 & 17, Evening >17)**:
+10. **Write a SQL query to create each shift and number of orders (Example Morning <12, Afternoon Between 12 & 17, Evening >17):**
 ```sql
 with hourly_sale as
 (
@@ -187,23 +187,95 @@ case
     group by shift;
 ```
 
+Q11. **High-value transactions summary (total_sale > 1000):**
+```sql
+SELECT 
+    COUNT(*) AS high_value_orders,
+    SUM(total_sale) AS high_value_revenue,
+    ROUND(SUM(total_sale) * 100.0 / (SELECT SUM(total_sale) FROM retail_sales), 2) AS pct_of_revenue
+FROM retail_sales
+WHERE total_sale > 1000;
+```
+
+Q12. **Revenue contribution by top 5 customers:**
+```sql
+SELECT 
+    customer_id, 
+    SUM(total_sale) AS total_revenue,
+    ROUND(SUM(total_sale) * 100.0 / (SELECT SUM(total_sale) FROM retail_sales), 2) AS pct_of_total
+FROM retail_sales
+GROUP BY customer_id
+ORDER BY total_revenue DESC
+LIMIT 5;
+```
+
+Q13. **Category-wise revenue share:**
+```sql
+SELECT 
+    category, 
+    ROUND(SUM(total_sale) * 100.0 / (SELECT SUM(total_sale) FROM retail_sales), 2) AS revenue_percent
+FROM retail_sales
+GROUP BY category;
+```
+
+Q14. **Shift-wise sales percentage:**
+```sql
+WITH hourly_sale AS (
+    SELECT *,
+        CASE 
+            WHEN HOUR(sale_time) < 12 THEN 'Morning'
+            WHEN HOUR(sale_time) BETWEEN 12 AND 17 THEN 'Afternoon'
+            ELSE 'Evening'
+        END AS shift
+    FROM retail_sales
+)
+SELECT 
+    shift, 
+    ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM retail_sales), 2) AS shift_percent
+FROM hourly_sale
+GROUP BY shift;
+```
+
+Q15. **Best month comparison to average month:**
+```sql
+WITH monthly_sales AS (
+    SELECT MONTH(sale_date) AS month, SUM(total_sale) AS total_sales
+    FROM retail_sales
+    GROUP BY MONTH(sale_date)
+)
+SELECT 
+    MAX(total_sales) AS best_month_sales,
+    ROUND(AVG(total_sales), 2) AS avg_monthly_sales,
+    ROUND((MAX(total_sales) - AVG(total_sales)) * 100.0 / AVG(total_sales), 2) AS pct_above_avg
+FROM monthly_sales;
+```
+
 ## Findings
 
-- **Customer Demographics**: The dataset includes customers from various age groups, with sales distributed across different categories such as Clothing and Beauty.
-- **High-Value Transactions**: Multiple orders had sales amounts exceeding 1000, highlighting premium and bulk purchases.
-- **Sales Trends**: Monthly analysis reveals best-performing months for each year, helping to identify seasonal demand patterns.
-- **Shift-wise Sales**: Transactions are spread across Morning, Afternoon, and Evening shifts, showing how order volume varies by time of day.
-- **Customer Insights**: The project highlights top-spending customers and provides counts of unique customers per category, useful for loyalty and marketing strategies.
+- **Data Cleaning**: Removed 13 incomplete records (0.65%) to improve overall data reliability.
+- **Customer Demographics**: Customers span multiple age groups and genders, contributing to purchases across categories such as Clothing, Electronics, and Beauty.
+- **High-Value Transactions**: Identified 306 high-value transactions (15.3% of total orders) with sales exceeding ₹1000, generating ₹475,600 — 52.17% of total revenue.
+- **Category Performance**: Revenue share — Electronics (34.42%), Clothing (34.12%), and Beauty (31.46%).
+- **Top Customers**: Top 5 customers contributed ₹148,470 (16.28% of total revenue), indicating strong customer loyalty potential.
+- **Sales Trends**: Monthly analysis revealed the best-performing month generated ₹141,025 — 86.33% above the average month (₹75,685.83), showing strong seasonal sales variation.
+- **Shift-wise Sales**: Highest transaction volume occurred in the Evening (53.10%), followed by Morning (28.05%) and Afternoon (18.85%), providing insights for staffing and marketing schedules.
+- **Customer Insights**: Unique customer counts and top spenders were identified per category — valuable for loyalty and targeted marketing.
+- **Overall Impact**: Analysis helped uncover spending behavior, sales seasonality, and high-performing segments, supporting data-driven retail strategies.
 
 ## Reports
 
-- **Sales Summary**: Covers total sales, category-level sales, and overall order volume.
-- **Trend Analysis**:Breaks down monthly sales performance and time-of-day order patterns.
-- **Customer Insights**: Includes top customers by sales, customer distribution across categories, and gender-based transaction counts.
+- **Sales Overview**: Summarizes total revenue, order count, and category-level performance, highlighting the contribution of Electronics, Clothing, and Beauty.
+- **High-Value & Customer Insights**: Identifies 306 premium transactions (₹475,600 revenue) and top 5 customers contributing 16.28% of total sales — useful for retention and loyalty analysis.
+- **Trend Analysis**: Examines monthly sales variations, revealing the best-performing month with sales 86.33% above the average, and highlights seasonal demand patterns.
+- **Shift-Wise Performance**: Compares order distribution by Morning, Afternoon, and Evening, showing Evening dominance (53.10%) — supporting staffing and marketing optimization.
+- **Data Quality & Cleaning**: Ensures analytical accuracy by removing 13 incomplete records, improving dataset reliability by 0.65%.
 
 ## Conclusion
 
-This project serves as a comprehensive introduction to SQL for data analysts, covering database setup, data cleaning, exploratory data analysis, and business-driven SQL queries. The findings from this project can help drive business decisions by understanding sales patterns, customer behavior, and product performance.
+This SQL Retail Sales Analysis project demonstrates the power of SQL in performing data cleaning, exploratory data analysis, and business insight generation.
+Through detailed queries and performance metrics, the project uncovers key sales drivers, high-value customer behavior, and seasonal demand trends.
+
+The insights derived can directly support data-driven decision-making in retail — such as inventory planning, marketing optimization, and customer retention strategies — while also showcasing strong SQL proficiency for data analytics roles.
 
 
 This project is part of my portfolio, showcasing the SQL skills essential for data analyst roles. If you have any questions, feedback, or would like to collaborate, feel free to get in touch!
@@ -213,6 +285,7 @@ This project is part of my portfolio, showcasing the SQL skills essential for da
   
 
 Thank you for your support, and I look forward to connecting with you!
+
 
 
 
